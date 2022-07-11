@@ -50,11 +50,14 @@ module.exports = {
             let workStatus = null
             if (issues.length != 0) {
                 for (var i = 0; i < issues.length; i++) {
-                    if (issues.status != 0) {
+                    if (issues[i].status != 0) {
                         workStatus = issues[i]
+                        workStatus.check = true
                         resolve(workStatus)
                     }
                 }
+            } else {
+                resolve({check:false})
             }
         })
     }

@@ -2,7 +2,7 @@ const { response } = require('express');
 var express = require('express');
 var router = express.Router();
 var userAuth = require('../controllers/usercontrollers/userAuth')
-var issueModule = require('../controllers/usercontrollers/complaintRaise')
+var issueModule = require('../controllers/usercontrollers/complaintRaise');
 
 //This constant will verify that userer is logged in 
 const verifyUser = (req, res, next) => {
@@ -49,7 +49,6 @@ router.get('/login', (req, res) => {
 //@DESC post data to the server and validate
 router.post('/login', (req, res) => {
   userAuth.doLogin(req.body).then((response) => {
-    console.log(response);
     if (response.status) {
       req.session.loggedIn = true
       req.session.user = response.user
@@ -92,5 +91,20 @@ router.get('/history', verifyUser, (req, res) => {
 
 //GET   /status
 //@DESC   get work status
-
+router.get('/status', verifyUser, (req, res) => {
+  let userId = req.session.user._id
+  issueModule.getIssueStatus(userId).then((currentStatus) => {
+    console.log(currentStatus);
+    if(currentStatus.check){
+      if(currentStatus.status == 1){
+        res.render('user/status',{status:'Assigned'})
+      } else if(currentStatus.status == 2){
+        res.render('user/status',{status:'Ready to reach'})
+      }
+      
+    } else {
+      res.render('user/status',{'workNotExist':true})
+    }
+  })
+})
 module.exports = router;
