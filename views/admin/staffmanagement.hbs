@@ -1,0 +1,29 @@
+<section>
+    <div class="container p-2">
+    <div class="col-md-3">
+        <a href="/admin/addstaff" class="btn btn-success">Add User</a>
+        </div>
+    <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">SI.No</th>
+      <th scope="col">Name</th>
+      <th scope="col">Check In</th>
+      <th scope="col">Check Out</th>
+      <th scope="col">Current Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each staff}}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{this.name}}</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+      <td>Thornton</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+</section>
