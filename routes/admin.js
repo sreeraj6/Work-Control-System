@@ -1,8 +1,9 @@
 const express = require('express');
 const { response } = require('../app');
 var router = express.Router();
-const adminauth = require('../controllers/adminAuthentication');
-const admincontrol = require('../controllers/adminStaffManage');
+var adminauth = require('../controllers/adminAuthentication');
+var admincontrol = require('../controllers/adminStaffManage');
+var workDetails = require('../controllers/adminControllers/WorkDetails')
 
 //Verfiy admin is logged in or not
 const verifyadmin = (req,res,next)=>{
@@ -60,6 +61,14 @@ router.post('/addstaff',(req,res)=>{
         }else{
             res.redirect('/admin')
         }
+    })
+})
+
+//POST  /admin/workdetails
+//@DESC     get work status and details
+router.get('/workdetails',(req,res)=>{
+    workDetails.newWorks().then((works)=>{
+        res.render('admin/workassign',{works})
     })
 })
 

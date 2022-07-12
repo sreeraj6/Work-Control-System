@@ -1,16 +1,4 @@
 <section>
-    {{#if notExist}}
-    <section class="px-md-5 mx-md-5 text-center dark-grey-text mb-4">
-
-        <img src="https://mdbootstrap.com/img/Others/404_mdb.png" alt="Error 404" class="img-fluid mb-4">
-
-        <h3 class="font-weight-bold">You did not have work history</h3>
-
-        <p>Please, let us know how you got here, and use one of the following links to navigate back to safe harbor.</p>
-
-
-      </section>
-    {{else}}
     <div class="container p-2">
         <table class="table table-striped">
             <thead>
@@ -19,21 +7,20 @@
                     <th scope="col">Issue</th>
                     <th scope="col">Check In</th>
                     <th scope="col">Check Out</th>
-                    <th scope="col">Current Status</th>
+                    <th scope="col">Work Assign</th>
                 </tr>
             </thead>
             <tbody>
-                {{#each history}}
+                {{#each works}}
                 <tr>
                     <th scope="row">1</th>
                     <td>{{this.complaint_topic}}</td>
                     <td>{{this.complaint_brief}}</td>
-                    <td>{{this.phone}}</td>
-                    <td>{{this.status}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td><button type="button" class="btn btn-warning">Assign to</button></td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
     </div>
-    {{/if}}
 </section>

@@ -59,7 +59,12 @@ router.post('/login', (req, res) => {
     }
   })
 })
-
+//GET   /logout
+//@DESC   erase datas from the session 
+router.get('/logout',(req,res)=>{
+  req.session.destroy()
+  res.redirect('/')
+})
 //GET   /complaint
 //@DESC   get complaint form
 router.get('/complaint', verifyUser, (req, res) => {
@@ -84,7 +89,7 @@ router.get('/history', verifyUser, (req, res) => {
     if (history.status) {
       res.render('user/history', { 'notExist': true })
     } else {
-      res.render('user/history', history)
+      res.render('user/history', {history})
     }
   })
 })

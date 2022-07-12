@@ -40,4 +40,17 @@ router.post('/login', (req, res) => {
     }
   })
 })
+
+//GET   /staff/logout
+//@DESC   logout staff
+router.get('/logout',(req,res)=>{
+  req.session.destroy()
+  res.redirect('/')
+})
+
+//GET   /staff/checkinout
+//@DESC   staff checkin checkout page
+router.get('/checkinout',(req,res)=>{
+
+})
 module.exports = router;
