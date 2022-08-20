@@ -16,7 +16,7 @@ const verifystaff = (req,res,next)=>{
 //GET   /staff
 //@DESC   staff dashboard
 router.get('/', verifystaff,(req, res) => {
-  res.send('Staff portal is here');
+  res.render('staff/home')
 });
 
 //GET   /staff/login
@@ -51,6 +51,6 @@ router.get('/logout',(req,res)=>{
 //GET   /staff/checkinout
 //@DESC   staff checkin checkout page
 router.get('/checkinout',(req,res)=>{
-
+  console.log(req.session.user._id);
 })
 module.exports = router;

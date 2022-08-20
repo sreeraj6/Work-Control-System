@@ -1,0 +1,46 @@
+<section>
+    <div class="container p-2">
+        <button type="button" onclick="checkin()" class="btn btn-success" >checkin</button>
+        <p id="currentloc"></p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">SI.No</th>
+                    <th scope="col">Issue</th>
+                    <th scope="col">Check In</th>
+                    <th scope="col">Check Out</th>
+                    <th scope="col">Work Assign</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each works}}
+                <tr>
+                    <th scope="row">1</th>
+                    <td>{{this.complaint_topic}}</td>
+                    <td>{{this.complaint_brief}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td><button type="button" class="btn btn-warning">Assign to</button></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+
+    var loc = document.getElementById("currentloc");
+    var gpsloc = null;
+    function checkin() {
+        if (navigator.geolocation) {
+           gpsloc = navigator.geolocation.getCurrentPosition(passPosition)
+           
+        }
+
+    }
+    function passPosition(position) {
+        $.ajax
+            loc.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+        }
+</script>

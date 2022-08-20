@@ -1,5 +1,6 @@
 <section>
     <div class="container p-2">
+        <button type="button" onclick="checkin()" class="btn btn-success">Check In</button>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -17,10 +18,16 @@
                     <td>{{this.complaint_topic}}</td>
                     <td>{{this.complaint_brief}}</td>
                     <td>{{this.createdAt}}</td>
-                    <td><button type="button" class="btn btn-warning">Assign to</button></td>
+                    <td><button type="button" onclick="workAssign({{this._id}})" class="btn btn-warning">Assign to</button></td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
     </div>
 </section>
+<script>
+    function workAssign(workId){
+        alert("albs")
+        console.log(workId)
+    }
+</script>
