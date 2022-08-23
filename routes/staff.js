@@ -2,6 +2,7 @@ var express = require('express');
 const { response } = require('../app');
 var router = express.Router();
 var staffAuth = require('../controllers/Staffcontrollers/staffAuthentication')
+var staffAttend = require('../controllers/Staffcontrollers/staffAttendance')
 
 //This constant will verify that staff is logged in 
 const verifystaff = (req,res,next)=>{
@@ -46,6 +47,20 @@ router.post('/login', (req, res) => {
 router.get('/logout',(req,res)=>{
   req.session.destroy()
   res.redirect('/')
+})
+
+//POST  /staff/checkin
+//@DESC staff checkin fetch location and time
+router.post('/checkin',(req,res)=>{
+  staffAttend.doCheckIn(req.body,req.session.user._id).then((response)=>{
+    console.log(response);
+  })
+})
+
+//POST  /staff/checkout
+//@DESC  staff checkout
+router.post('/checkout',(req,res)=>{
+  console.log(req.body,req.session.user._id);
 })
 
 //GET   /staff/checkinout

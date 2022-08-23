@@ -1,6 +1,7 @@
 <section>
     <div class="container p-2">
         <button type="button" onclick="checkin()" class="btn btn-success" >checkin</button>
+        <div class="float-right"><button type="button" onclick="checkout()" class="btn btn-danger text-left" >checkout</button></div>
         <p id="currentloc"></p>
         <table class="table table-striped">
             <thead>
@@ -28,7 +29,8 @@
 </section>
 
 <script>
-
+    var time = new Date().getHours()+":"+new Date().getMinutes();
+    var date = new Date().getDate()+"/"+new Date().getMonth()+"/"+new Date().getFullYear();
     var loc = document.getElementById("currentloc");
     var gpsloc = null;
     function checkin() {
@@ -39,8 +41,43 @@
 
     }
     function passPosition(position) {
-        $.ajax
+        $.ajax({
+            url:'/staff/checkin',
+            data:{
+                date:date,
+                time:time,
+                latitude:position.coords.latitude,
+                longitude:position.coords.longitude
+            },
+            method:"POST",
+            success:((response)=>{
+               
+            })
+        })
             loc.innerHTML = "Latitude: " + position.coords.latitude +
                 "<br>Longitude: " + position.coords.longitude;
+    }
+
+    function checkout() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(chekoutPos)
         }
+    }
+    function chekoutPos(position) {
+        $.ajax({
+            url:'/staff/checkout',
+            data:{
+                date:date,
+                time:time,
+                latitude:position.coords.latitude,
+                longitude:position.coords.longitude
+            },
+            method:"POST",
+            success:((response)=>{
+                console.log(response)
+            })
+        })
+    }
+
+    
 </script>
