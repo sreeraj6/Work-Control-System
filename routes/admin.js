@@ -16,6 +16,7 @@ const verifyadmin = (req,res,next)=>{
 //GET  /admin
 //@DESC     admin dashboard
 router.get('/',verifyadmin,(req,res)=>{
+    
     admincontrol.getStaff().then((staff)=>{
         res.render('admin/staffmanagement',{staff,admin: true,username: req.session.user.username})
     })
@@ -66,12 +67,21 @@ router.post('/addstaff',(req,res)=>{
 
 //POST  /admin/workdetails
 //@DESC     get work status and details
-router.get('/workdetails',(req,res)=>{
+router.get('/workdetails',async (req,res)=>{
+    let availStaff = await admincontrol.getAvailableStaff()
     workDetails.newWorks().then((works)=>{
-        res.render('admin/workassign',{works})
+        console.log(availStaff);
+        res.render('admin/workassign',{works,availStaff})
     })
 })
 
+//POST  /admin/assign
+//@DESC assign work to the avilable employ
+router.post('/assign',(req,res)=>{
+    workDetails.assignWork(req.body).then((response)=>{
+        res.redirect('/workdetails')
+    })
+})
 
 
 module.exports = router

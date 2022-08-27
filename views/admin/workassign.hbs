@@ -18,7 +18,15 @@
                     <td>{{this.complaint_topic}}</td>
                     <td>{{this.complaint_brief}}</td>
                     <td>{{this.createdAt}}</td>
-                    <td><button type="button" onclick="workAssign({{this._id}})" class="btn btn-warning">Assign to</button></td>
+                    
+                    <td>
+                        <select id="selstaff" class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            {{#each ../availStaff}}
+                            <option value='{{this._id}}/{{../this._id}}' >{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -26,8 +34,26 @@
     </div>
 </section>
 <script>
-    function workAssign(workId){
-        alert("albs")
-        console.log(workId)
-    }
+   $(function () {
+        $("#selstaff").change(function(){
+            var staffId = $(this).val();
+            var array = staffId.split("/",2);
+            selectStaff(array)
+        })
+   })
+   function selectStaff(staffId){
+    var id = staffId
+        $.ajax({
+            url:'/admin/assign',
+            data:{
+                staffId:id[0],
+                complaintId:id[1]
+            },
+            method:"POST",
+            success:((response)=>{
+                
+                
+            })
+        })
+   }
 </script>

@@ -40,5 +40,20 @@ module.exports = {
             let staff = await db.get().collection('staff').find().toArray()
             resolve(staff);
         })
-    }
+    },
+
+    //staff current details
+    getStaffCheckinout: () => {
+        return new Promise(async (resolve, reject) => {
+            let staffData = await db.get().collection('attendance')
+        })
+    },
+
+    //available staff
+    getAvailableStaff: () => {
+        return new Promise(async (resolve, reject) => {
+            let availStaff = await db.get().collection('staff').find({ checkin: 0 }).toArray()
+            resolve(availStaff)
+        })
+    },
 }

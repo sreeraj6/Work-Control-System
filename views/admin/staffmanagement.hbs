@@ -8,6 +8,7 @@
     <tr>
       <th scope="col">SI.No</th>
       <th scope="col">Name</th>
+      <th scope="col">Date</th>
       <th scope="col">Check In</th>
       <th scope="col">Check Out</th>
       <th scope="col">Current Status</th>
@@ -18,9 +19,12 @@
     <tr>
       <th scope="row">1</th>
       <td>{{this.name}}</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>Thornton</td>
+      <td>{{this.checkin_date}}</td>
+      <td>{{this.checkin_time}}</td>
+      <td>{{this.checkout_time}}</td>
+      <td>
+        {{this.checkin}}
+      </td>
     </tr>
     {{/each}}
   </tbody>
