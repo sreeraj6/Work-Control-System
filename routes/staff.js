@@ -15,14 +15,7 @@ const verifystaff = (req,res,next)=>{
 }
 
 
-//GET   /staff
-//@DESC   staff dashboard
-router.get('/', verifystaff,(req, res) => {
-  console.log(req.session.user._id);
-  staffWork.getAssignedWork(req.session.user._id).then((currentwork)=>{
-    res.render('staff/home',{currentwork})
-  })
-});
+
 
 //GET   /staff/login
 //@DESC staff login page
@@ -50,8 +43,42 @@ router.post('/login', (req, res) => {
 //@DESC   logout staff
 router.get('/logout',(req,res)=>{
   req.session.destroy()
-  res.redirect('/')
+  res.redirect('/staff')
 })
+
+//GET   /staff
+//@DESC   staff dashboard
+router.get('/', verifystaff,(req, res) => {
+  staffWork.getAssignedWork(req.session.user._id).then((currentwork)=>{
+    if(currentwork){
+      switch (currentwork.status) {
+        case 1:
+          currentwork.status = "Assigned"
+          currentwork.badge = ""
+          break;
+        case 2:
+          currentwork.status = "Verified"
+          break;
+        case 3:
+          currentwork.status = "On road"
+          break;
+        case 4:
+          currentwork.status = "Reached"
+          break;
+        case 4:
+          currentwork.status = "Solved"
+          break;
+        case 5:
+          currentwork.status = "Completed"
+          break;
+      }
+      res.render('staff/home',{staffhead: true,currentwork})
+    }
+    else {
+      res.render('staff/home',{staffhead: true,nowork: true})
+    }
+  })
+});
 
 //POST  /staff/checkin
 //@DESC staff checkin fetch location and time
@@ -69,9 +96,40 @@ router.post('/checkout',(req,res)=>{
   })
 })
 
-//GET   /staff/checkinout
+//GET   /staff/updatestatus
+//@DESC work status update as per the staff side
+router.post('/updatestatus',(req,res) => {
+   staffWork.statusUpdate(req.body).then((response)=>{
+     res.json(response)
+   })
+})
+
+//GET /staff/updateloc
+//@DESC update staff loc in each stage of work 
+router.post('/updateloc',(req,res) => {
+  console.log(req.body);
+  staffWork.updateStaffLoc(req.body,req.session.user._id).then((response)=>{
+    console.log(response);
+  })
+})
+
+
+//POST   /staff/ready
 //@DESC   staff checkin checkout page
-router.get('/checkinout',(req,res)=>{
-  console.log(req.session.user._id);
+router.post('/ready',verifystaff,(req,res)=>{
+  staffWork.readyToWork(req.body,req.session.user._id).then((response)=>{
+    res.json(response);
+  })
+})
+
+//GET   /staff/leave
+//@DESC  get leave form for request
+router.get('/leave',verifystaff,(req,res)=>{
+  res.render('staff/leaveform',{staffhead: true})
+})
+//POST  /staff/leave
+//@DESC post leave from with data
+router.post('/leave',verifystaff,(req,res) => {
+  console.log(req.body);
 })
 module.exports = router;

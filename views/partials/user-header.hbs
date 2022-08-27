@@ -1,25 +1,22 @@
-<header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/admin">SCWS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/admin">All Product</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/all-user">All User</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/all-orders">All Order</a>
-                        </li>
-                    </ul>
+
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="/">Smart Work Control System</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item {{home}}"><a class="nav-link" href="/">Home</a></li>
+                            <li class="nav-item {{complaint}}"><a class="nav-link" href="/complaint">Raise a complaint</a></li>
+                            <li class="nav-item {{histry}}"><a class="nav-link" href="/history">History</a></li>
+                            <li class="nav-item {{status}}"><a class="nav-link" href="/status">Status</a></li>
+                            {{#if user}}
+                            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                            {{else}}
+                            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                            {{/if}}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav> 
+        

@@ -14,9 +14,14 @@ const verifyUser = (req, res, next) => {
 }
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  let date = new Date()
-  console.log(date);
-  res.send('User module is here');
+  if(req.session.loggedIn){
+    issueModule.getIssueStatus(req.session.user._id).then((currentStatus) => {
+      console.log(currentStatus);
+      res.render('user/home',{user:true,currentStatus,work:true,home:'active'})
+    })
+  }else{
+    res.render('user/home',{home:'active'})
+  }
 });
 //GET   /signup
 //@DESC   get signup form for take user data
@@ -68,7 +73,7 @@ router.get('/logout',(req,res)=>{
 //GET   /complaint
 //@DESC   get complaint form
 router.get('/complaint', verifyUser, (req, res) => {
-  res.render('user/complaint')
+  res.render('user/complaint',{user:true,complaint:'active'})
 })
 
 //POST   /complaint
@@ -87,9 +92,9 @@ router.get('/history', verifyUser, (req, res) => {
   issueModule.getIssueHistory(userId).then((history) => {
     console.log(history);
     if (history.status) {
-      res.render('user/history', { 'notExist': true })
+      res.render('user/history', { 'notExist': true,user:true,histry:'active' })
     } else {
-      res.render('user/history', {history})
+      res.render('user/history', {history,user:true,histry:'active'})
     }
   })
 })
@@ -100,16 +105,14 @@ router.get('/status', verifyUser, (req, res) => {
   let userId = req.session.user._id
   issueModule.getIssueStatus(userId).then((currentStatus) => {
     console.log(currentStatus);
-    if(currentStatus.check){
-      if(currentStatus.status == 1){
-        res.render('user/status',{status:'Assigned'})
-      } else if(currentStatus.status == 2){
-        res.render('user/status',{status:'Ready to reach'})
-      }
-      
-    } else {
-      res.render('user/status',{'workNotExist':true})
-    }
+    res.render('user/status',{currentStatus,user:true,status:'active'})
+  })
+})
+
+router.get('/statusbar',verifyUser,(req,res) => {
+  issueModule.getIssueStatus(req.session.user._id).then((currentStatus) => {
+    console.log(currentStatus);
+    res.render('user/progress',{currentStatus})
   })
 })
 module.exports = router;

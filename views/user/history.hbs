@@ -1,13 +1,11 @@
 <section>
     {{#if notExist}}
     <section class="px-md-5 mx-md-5 text-center dark-grey-text mb-4">
-
-        <img src="https://mdbootstrap.com/img/Others/404_mdb.png" alt="Error 404" class="img-fluid mb-4">
-
-        <h3 class="font-weight-bold">You did not have work history</h3>
-
+        
+        <h3 class="font-weight-bold text-center">You did not have complaint history</h3>
         <p>Please, let us know how you got here, and use one of the following links to navigate back to safe harbor.</p>
 
+        
 
       </section>
     {{else}}
@@ -17,19 +15,19 @@
                 <tr>
                     <th scope="col">SI.No</th>
                     <th scope="col">Issue</th>
-                    <th scope="col">Check In</th>
-                    <th scope="col">Check Out</th>
-                    <th scope="col">Current Status</th>
+                    <th scope="col">Issue Details</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Issue Status</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each history}}
                 <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{inc @index}}</th>
                     <td>{{this.complaint_topic}}</td>
                     <td>{{this.complaint_brief}}</td>
                     <td>{{this.phone}}</td>
-                    <td>{{this.status}}</td>
+                    <td><span class="badge badge-success">{{this.status}}</span></td>
                 </tr>
                 {{/each}}
             </tbody>

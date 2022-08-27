@@ -25,7 +25,7 @@ router.get('/',verifyadmin,(req,res)=>{
 //GET      /admin/login
 //@DESC     admin login page get
 router.get('/login',(req,res)=>{
-    res.render('admin/login',{'logErr':req.session.loginError})
+    res.render('admin/login',{admin: true,'logErr':req.session.loginError})
     req.session.loginError=false
 })
 
@@ -47,7 +47,7 @@ router.post('/login',(req,res)=>{
 //GET      /admin/adduser
 //@DESC     load add-staff page into browser
 router.get('/addstaff',(req,res)=>{
-    res.render('admin/add-staff',{'staffexist':req.session.staff})
+    res.render('admin/add-staff',{admin: true,'staffexist':req.session.staff})
     req.session.staff=false
 })
 
@@ -55,7 +55,6 @@ router.get('/addstaff',(req,res)=>{
 //@DESC     add staff into company
 router.post('/addstaff',(req,res)=>{
     admincontrol.addStaff(req.body).then((response)=>{
-        console.log(response);
         if(response.user){
             req.session.staff = true
             res.redirect('/admin/addstaff')
@@ -65,13 +64,42 @@ router.post('/addstaff',(req,res)=>{
     })
 })
 
-//POST  /admin/workdetails
-//@DESC     get work status and details
-router.get('/workdetails',async (req,res)=>{
+//GET  /admin/pending works
+//@DESC     assign pending works to the available staff
+router.get('/pendingworks',async (req,res)=>{
     let availStaff = await admincontrol.getAvailableStaff()
     workDetails.newWorks().then((works)=>{
-        console.log(availStaff);
-        res.render('admin/workassign',{works,availStaff})
+        res.render('admin/workassign',{admin: true,works,availStaff})
+    })
+})
+
+//GET   /admin/workdetails
+//@DESC current work deatils
+router.get('/workdetails',(req,res)=>{
+    workDetails.getWorkDetails().then((workdata)=>{
+        for(var i=0;i<workdata.length;i++){
+            switch (workdata[i].status) {
+                case 1:
+                    workdata[i].status = "Assigned"
+                    break;
+                case 2:
+                    workdata[i].status = "Verified"
+                    break;
+                case 3:
+                    workdata[i].status = "On road"
+                    break;
+                case 4:
+                    workdata[i].status = "Reached"
+                    break;
+                case 4:
+                    workdata[i].status = "Solved"
+                    break;
+                case 5:
+                    workdata[i].status = "Completed"
+                    break;
+            }
+        }
+        res.render('admin/works',{admin: true,workdata})
     })
 })
 
@@ -79,9 +107,11 @@ router.get('/workdetails',async (req,res)=>{
 //@DESC assign work to the avilable employ
 router.post('/assign',(req,res)=>{
     workDetails.assignWork(req.body).then((response)=>{
-        res.redirect('/workdetails')
+        res.json(response)
     })
 })
 
-
+router.get('/map',(req,res)=>{
+    res.render('admin/map')
+})
 module.exports = router

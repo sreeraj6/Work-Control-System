@@ -1,0 +1,37 @@
+<section class="vh-100" style="background-color: #a3e5f5;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center  h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 ">
+                        <form action="" method="POST">
+                            <h3 class="mb-5">Leave application</h3>
+                            <div class="form-outline mb-2">
+                                <label class="form-label">Leave type</label>
+                                <select name="leavetype" class="form-select" aria-label="Default select example">
+                                    <option selected>Open this select menu</option>
+                                    <option value='Medical'>Medical</option>
+                                    <option value='weekly'>weekly</option>
+                                    <option value='other'>other</option>
+                                </select>
+                            </div>
+                            <div class="form-outline mb-2">
+                                <label class="form-label" for="typePasswordX-2">Date</label>
+                                <input type="text" name="date" class="form-control form-control-lg"
+                                    placeholder="[dd/mm/yyyy]" />
+                            </div>
+                            <div class="form-outline mb-2">
+                                <label class="form-label" for="typePasswordX-2">Reason</label>
+                                <textarea class="form-control" rows="5" name="reason"></textarea>
+                            </div>
+                            <div class="form-outline mb-2">
+                                <p class="text-danger">*one day leave are applicable</p>
+                            </div>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Apply</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

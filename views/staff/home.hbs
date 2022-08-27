@@ -1,11 +1,17 @@
 <section>
     <div class="container p-2">
+        <div class="row">
+            <p class="text-center text-danger">checkout is not allowed without complete the assigned work</p>
+        </div>
         <button type="button" onclick="checkin()" class="btn btn-success" >checkin</button>
         <div class="float-right">
             <button type="button" onclick="checkout()" class="btn btn-danger text-left" >checkout</button>
             <p id="checkout"></p>
         </div>
         <p id="currentloc"></p>
+        {{#if nowork}}
+        <p>Refresh the page for current status</p>
+        {{else}}
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -26,15 +32,20 @@
                     <td>{{currentwork.phone}}</td>
                     <td>{{currentwork.address}}</td>
                     <td>{{currentwork.landmark}}</td>
-                    <td><button type="button" class="btn btn-warning">Assign to</button></td>
+                    <td><a type="button" onclick="statusChange('{{currentwork._id}}') " class="btn btn-warning">Update Status</a></td> 
+                    <td>{{currentwork.status}}</td>
+                    <td><a type="button" onclick="readyToWork('{{currentwork._id}}')" class="btn btn-warning">Ready to work</a></td> 
                 </tr>
 
             </tbody>
         </table>
+        {{/if}}
     </div>
 </section>
 
 <script>
+    
+    var tempId = null;
     var time = new Date().getHours()+":"+new Date().getMinutes();
     var date = new Date().getDate()+"/"+new Date().getMonth()+"/"+new Date().getFullYear();
     var loc = document.getElementById("currentloc");
@@ -85,6 +96,78 @@
             })
         })
     }
-
     
+    // change work status
+    function statusChange(complaintId) {
+        var id = complaintId;
+        updateCurrentLoc();
+        
+        $.ajax({
+            url:'/staff/updatestatus',
+            data:{
+                date:date,
+                time:time,
+                complaintId:id,
+               // status:cstatus
+            },
+            method:'POST',
+            success:((response)=>{
+                if(response.check){
+                    alert("Completed");
+                    location.reload();
+                }else{
+                    alert("Status updated");
+                    location.reload();
+                }
+            })
+        })
+    }
+
+    function updateCurrentLoc(){
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getPos);
+        }
+    }
+    function getPos(position) {
+        $.ajax({
+            url:'/staff/updateloc',
+            data:{
+                date:date,
+                time:time,
+                latitude:position.coords.latitude,
+                longitude:position.coords.longitude
+            },
+            method:"POST",
+            success:((response)=>{
+                
+                
+            })
+        })
+    }
+
+    function readyToWork() {
+        if (navigator.geolocation) {
+           gpsloc = navigator.geolocation.getCurrentPosition(passGeo)
+           
+        }
+
+    }
+    function passGeo(position) {
+        $.ajax({
+            url:'/staff/ready',
+            data:{
+                date:date,
+                time:time,
+                latitude:position.coords.latitude,
+                longitude:position.coords.longitude
+            },
+            method:"POST",
+            success:((response)=>{
+                alert('ready to available');
+                location.reload();
+            })
+        })
+            loc.innerHTML = "Latitude: " + position.coords.latitude +
+                "<br>Longitude: " + position.coords.longitude;
+    }
 </script>

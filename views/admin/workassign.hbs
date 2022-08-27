@@ -1,6 +1,5 @@
 <section>
     <div class="container p-2">
-        <button type="button" onclick="checkin()" class="btn btn-success">Check In</button>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -51,6 +50,12 @@
             },
             method:"POST",
             success:((response)=>{
+                if(response.assign){
+                    alert("assigned");
+                    location.reload();
+                }else{
+                    
+                }
                 
                 
             })

@@ -38,6 +38,19 @@ module.exports = {
     getStaff: () => {
         return new Promise(async (resolve, reject) => {
             let staff = await db.get().collection('staff').find().toArray()
+            for(var i=0;i<staff.length;i++){
+                switch(staff[i].checkin){
+                    case 0:
+                        staff[i].checkin="Not available"
+                        break;
+                    case 1:
+                        staff[i].checkin="Available"
+                        break;
+                    case 2:
+                        staff[i].checkin="On work"
+                        break;
+                }
+            }
             resolve(staff);
         })
     },
@@ -52,7 +65,7 @@ module.exports = {
     //available staff
     getAvailableStaff: () => {
         return new Promise(async (resolve, reject) => {
-            let availStaff = await db.get().collection('staff').find({ checkin: 0 }).toArray()
+            let availStaff = await db.get().collection('staff').find({ checkin: 1 }).toArray()
             resolve(availStaff)
         })
     },
