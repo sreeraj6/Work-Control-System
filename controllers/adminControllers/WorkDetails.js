@@ -42,35 +42,55 @@ module.exports = {
                 {
                     $set: { checkin: 2 }
                 }).then((response) => {
-                    resolve({assign:true})
+                    resolve({ assign: true })
                 })
         })
     },
     getWorkDetails: () => {
-        return new Promise(async(resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             let data = await db.get().collection('complaints').aggregate([
                 {
-                    $match:{
-                        status:{
-                            $gte:1,
-                            $lt:6
+                    $match: {
+                        status: {
+                            $gte: 1,
+                            $lt: 6
                         }
                     }
                 },
                 {
-                    $lookup:{
-                        from:'staff',
-                        localField:'AssignedStaffId',
-                        foreignField:'_id',
-                        as:'staff'
+                    $lookup: {
+                        from: 'staff',
+                        localField: 'AssignedStaffId',
+                        foreignField: '_id',
+                        as: 'staff'
                     }
-                },{
-                    $project:{
-                        complaint_topic:1,phone:1,status:1,staff:{$arrayElemAt:['$staff',0]}
+                }, {
+                    $project: {
+                        complaint_topic: 1, phone: 1, status: 1, staff: { $arrayElemAt: ['$staff', 0] }
                     }
                 }
             ]).toArray()
             resolve(data)
+        })
+    },
+    getLocOfStaff: () => {
+        return new Promise(async (resolve, reject) => {
+            let location = await db.get().collection('staff').find(/*{checkin:{$gt:0}}*/).toArray();
+            let latestloc = []
+            if (location != null) {
+                for (var i = 0; i < location.length; i++) {
+                    latestloc[i] = {
+                        coords: {
+                            lat: location[i].latitude,
+                            lng: location[i].longitude
+                        },
+                        content: '<h1>' + location[i].name + '</h1><br>' + '<p>' + location[i].ctime + '</p>'
+                    }
+                }
+                resolve(latestloc)
+            }else {
+                resolve()
+            }
         })
     }
 }

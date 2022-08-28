@@ -112,6 +112,13 @@ router.post('/assign',(req,res)=>{
 })
 
 router.get('/map',(req,res)=>{
-    res.render('admin/map')
+    workDetails.getLocOfStaff().then((location)=>{
+            res.render('admin/map',{location})
+    })
+})
+router.get('/getloc',(req,res) => {
+    workDetails.getLocOfStaff().then((response)=>{
+        res.json(response)
+    })
 })
 module.exports = router

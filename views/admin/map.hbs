@@ -1,33 +1,75 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <h3>My Google Maps Demo</h3>
 <!--The div element for the map -->
+<button onclick="initMap()">load mpa</button>
 <div id="map" style="width:100%; height:100%"></div>
-
 <!-- 
      The `defer` attribute causes the callback to execute after the full HTML
      document has been parsed. For non-blocking uses, avoiding race conditions,
      and consistent behavior across browsers, consider loading using Promises
      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
     -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdtdyVvbeW_tMjWgr4kuasRkNwgClAfco&callback=initMap"
-    defer></script>
 <script>
-    // Initialize and add the map
+    var data = []
+    window.onload = loadData()
+    function loadData(){
+        alert('load');
+        $.ajax({
+            url:'/admin/getloc',
+            method:'GET',
+            success:((response)=>{
+                data=response;
+                console.log(data[0].coords);
+                
+            })
+        })
+    }
+    
     function initMap() {
-        // The location of Uluru
-        const uluru = { lat: 9.0010774, lng: 76.5430429 };
-        // The map, centered at Uluru
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 15,
-            center: uluru,
-        });
-        // The marker, positioned at Uluru
-        const marker = new google.maps.Marker({
-            position: uluru,
-            map: map,
-            title: "Hello World!"
-        });
+        //map options
+        var options = {
+            zoom: 13,
+            center: { lat: 9.095831, lng: 76.528351 }
+        }
+        var map = new google.maps.Map(document.getElementById('map'), options);
+        /*
+
+        */
+        for(var i = 0; i<data.length;i++){
+            addMarker(data[i])
+
+        }
+        console.log(data[1].coords);
+        addMarker(data[1].coords);
+        addMarker({ lat: 9.095831, lng: 76.528351 });
+
+        // Add marker function
+        function addMarker(coords) {
+            var marker = new google.maps.Marker({
+                position: coords,
+                map: map,
+                icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                label: {
+                    fontSize: "12pt",
+                    text: "Hello World!"
+                },
+            });
+
+            /*//check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                })
+            }*/
+        }
     }
 
-    window.initMap = initMap;
+    //window.initMap = initMap;
 </script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdtdyVvbeW_tMjWgr4kuasRkNwgClAfco&callback=initMap"
+    defer></script>
