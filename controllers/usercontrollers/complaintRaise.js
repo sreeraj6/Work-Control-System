@@ -33,7 +33,7 @@ module.exports = {
             var j = 0;
             if (issue.length != 0) {
                 for (var i = 0; i < issue.length; i++) {
-                    if (issue[i].status == 6) {     //seperate completed work into history checking status(0,1) of the issue
+                    if (issue[i].status == 7) {     //seperate completed work into history checking status(0,1) of the issue
                         issue[i].status = "completed"
                         history[j] = issue[i]
                         j++;
@@ -52,29 +52,33 @@ module.exports = {
             var j = 0;
             if (issues.length != 0) {
                 for (var i = 0; i < issues.length; i++) {
-                    if (issues[i].status > 0 && issues[i].status < 6) {
+                    if (issues[i].status > 0 && issues[i].status <= 6) {
                         switch (issues[i].status) {
                             case 1:
+                                issues[i].status = "Search for staff"
+                                issues[i].badge = "badge-warning"
+                                break;
+                            case 2:
                                 issues[i].status = "Assigned"
                                 issues[i].badge = "badge-success"
                                 break;
-                            case 2:
+                            case 3:
                                 issues[i].status = "Verified"
                                 issues[i].badge = "badge-info"
                                 break;
-                            case 3:
+                            case 4:
                                 issues[i].status = "On road"
                                 issues[i].badge = "badge-success"
                                 break;
-                            case 4:
+                            case 5:
                                 issues[i].status = "Reached"
                                 issues[i].badge = "badge-success"
                                 break;
-                            case 4:
+                            case 6:
                                 issues[i].status = "Solved"
                                 issues[i].badge = "badge-danger"
                                 break;
-                            case 5:
+                            case 7:
                                 issues[i].status = "Completed"
                                 issues[i].badge = "badge-danger"
                                 break;

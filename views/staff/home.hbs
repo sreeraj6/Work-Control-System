@@ -3,11 +3,20 @@
         <div class="row">
             <p class="text-center text-danger">checkout is not allowed without complete the assigned work</p>
         </div>
-        <button type="button" onclick="checkin()" class="btn btn-success" >checkin</button>
+        {{#if checkin_stat}}
+        <button type="button" onclick="checkin()" class="btn btn-success" disabled>checkin</button>
+        <p>You are In</p>
         <div class="float-right">
             <button type="button" onclick="checkout()" class="btn btn-danger text-left" >checkout</button>
             <p id="checkout"></p>
         </div>
+        {{else}}
+        <button type="button" onclick="checkin()" class="btn btn-success" >checkin</button>
+        <div class="float-right">
+            <button type="button" onclick="checkout()" class="btn btn-danger text-left" disabled>checkout</button>
+            <p id="checkout"></p>
+        </div>
+        {{/if}}
         <p id="currentloc"></p>
         {{#if nowork}}
         <p>Refresh the page for current status</p>
@@ -68,7 +77,12 @@
             },
             method:"POST",
             success:((response)=>{
-               
+               if(response.checkin){
+                alert("check in");
+                location.reload();
+               }else{
+                alert("your checkin failed due to leave or other reason");
+               }
             })
         })
             loc.innerHTML = "Latitude: " + position.coords.latitude +
@@ -91,7 +105,10 @@
             },
             method:"POST",
             success:((response)=>{
-                
+                if(response.checkout){
+                    alert("You are checked out");
+                    location.reload();
+                }
                 
             })
         })
@@ -163,11 +180,13 @@
             },
             method:"POST",
             success:((response)=>{
+                if(response.res){
+                alert('Something error occured');
+                }else{
                 alert('ready to available');
                 location.reload();
+                }
             })
         })
-            loc.innerHTML = "Latitude: " + position.coords.latitude +
-                "<br>Longitude: " + position.coords.longitude;
     }
 </script>

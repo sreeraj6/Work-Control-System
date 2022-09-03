@@ -3,7 +3,8 @@ const { response } = require('../app');
 var router = express.Router();
 var staffAuth = require('../controllers/Staffcontrollers/staffAuthentication')
 var staffAttend = require('../controllers/Staffcontrollers/staffAttendance')
-var staffWork = require('../controllers/Staffcontrollers/AboutWork')
+var staffWork = require('../controllers/Staffcontrollers/AboutWork');
+const { route } = require('./user');
 
 //This constant will verify that staff is logged in 
 const verifystaff = (req,res,next)=>{
@@ -48,34 +49,43 @@ router.get('/logout',(req,res)=>{
 
 //GET   /staff
 //@DESC   staff dashboard
-router.get('/', verifystaff,(req, res) => {
+router.get('/', verifystaff,async(req, res) => {
+  let resp = await staffAttend.staffStatus(req.session.user._id)
+  let checkin_stat;
+  if(resp.status){
+    checkin_stat = true
+  }else{
+    checkin_stat = false
+  }
   staffWork.getAssignedWork(req.session.user._id).then((currentwork)=>{
     if(currentwork){
       switch (currentwork.status) {
         case 1:
-          currentwork.status = "Assigned"
-          currentwork.badge = ""
+          currentwork.status = "Searching for staff"
           break;
         case 2:
-          currentwork.status = "Verified"
+          currentwork.status = "Assigned"
           break;
         case 3:
+          currentwork.status = "Verified"
+          break;
+        case 4:
           currentwork.status = "On road"
           break;
-        case 4:
+        case 5:
           currentwork.status = "Reached"
           break;
-        case 4:
+        case 6:
           currentwork.status = "Solved"
           break;
-        case 5:
+        case 7:
           currentwork.status = "Completed"
           break;
       }
-      res.render('staff/home',{staffhead: true,currentwork})
+      res.render('staff/home',{staffhead: true,currentwork,checkin_stat})
     }
     else {
-      res.render('staff/home',{staffhead: true,nowork: true})
+      res.render('staff/home',{staffhead: true,nowork: true,checkin_stat})
     }
   })
 });
@@ -85,6 +95,7 @@ router.get('/', verifystaff,(req, res) => {
 router.post('/checkin',(req,res)=>{
   staffAttend.doCheckIn(req.body,req.session.user._id).then((response)=>{
     console.log(response);
+    res.json(response)
   })
 })
 
@@ -109,7 +120,7 @@ router.post('/updatestatus',(req,res) => {
 router.post('/updateloc',(req,res) => {
   console.log(req.body);
   staffWork.updateStaffLoc(req.body,req.session.user._id).then((response)=>{
-    console.log(response);
+    res.json(response)
   })
 })
 
@@ -117,7 +128,9 @@ router.post('/updateloc',(req,res) => {
 //POST   /staff/ready
 //@DESC   staff checkin checkout page
 router.post('/ready',verifystaff,(req,res)=>{
+  console.log(req.body,req.session.user._id);
   staffWork.readyToWork(req.body,req.session.user._id).then((response)=>{
+    console.log(response);
     res.json(response);
   })
 })
@@ -125,11 +138,35 @@ router.post('/ready',verifystaff,(req,res)=>{
 //GET   /staff/leave
 //@DESC  get leave form for request
 router.get('/leave',verifystaff,(req,res)=>{
-  res.render('staff/leaveform',{staffhead: true})
+  if(req.session.leave){
+    res.render('staff/leaveform',{staffhead: true,error:true})
+    req.session.leave = false
+  }else{
+    res.render('staff/leaveform',{staffhead:true})
+  }
+  
 })
 //POST  /staff/leave
 //@DESC post leave from with data
 router.post('/leave',verifystaff,(req,res) => {
-  console.log(req.body);
+  var time = new Date().getHours()+":"+new Date().getMinutes();
+  req.body.time=time
+  staffAttend.requestLeave(req.session.user._id,req.body).then((response)=>{
+  if(response.status!=false){
+    res.redirect('/leavestatus')
+  }else{
+    req.session.leave = true
+    res.redirect('/staff/leave')
+  }
+  })
+})
+
+//GET   /staff/leavestatus
+//@DESC get leave status granted or rejected
+router.get('/leavestatus',verifystaff,(req,res)=>{
+  staffAttend.leaveStatus(req.session.user._id).then((leavestat)=>{
+    console.log(leavestat);
+    res.render('staff/leavestatus',{staffhead:true,leavestat})
+  })
 })
 module.exports = router;
