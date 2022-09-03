@@ -25,16 +25,12 @@ module.exports = {
                 })
             let work = await db.get().collection('attendance').updateOne({
                 staffId: ObjectId(data.staffId),
-                checkinout: {
-                    $elemMatch: {
-                        date: currentDate
-                    }
-                }
+                date: currentDate
             }, {
                 $set: {
-                    "checkinout.$.checkin": 2,
-                    "checkinout.$.complaintId": data.complaintId,
-                    "checkinout.$.last_time": currentTime
+                    checkin: 2,
+                    complaintId: data.complaintId,
+                    last_time: currentTime
                 }
             }
             )
@@ -53,7 +49,7 @@ module.exports = {
                     $match: {
                         status: {
                             $gte: 1,
-                            $lt: 6
+                            $lte: 6
                         }
                     }
                 },

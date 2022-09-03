@@ -1,0 +1,116 @@
+<section class="bg-info ">
+    <div class="">
+        <div class="container">
+            <div class="row text-white">
+                <div class="card mt-2 ml-2 mb-3 bg-primary" style="max-width: 25rem;">
+                    <div class="card-body">
+                        <h5 class="h1">{{progress}}</h5>
+                        <h5 class="card-title">On progress work</h5>
+                        <p class="card-text">Number of works on progress</p>
+                    </div>
+                </div>
+
+                <div class="card mt-2 ml-2 mb-3 bg-danger" style="max-width: 25rem;">
+                    <div class="card-body">
+                        <h5 class="h1">{{pending}}</h5>
+                        <h5 class="card-title">Pending works</h5>
+                        <p class="card-text">Number of pending works</p>
+                    </div>
+                </div>
+                <div class="card mt-2 ml-2 mb-3 bg-success" style="max-width: 25rem;">
+                    <div class="card-body">
+                        <h5 class="h1">{{usercount}}</h5>
+                        <h5 class="card-title">Total users</h5>
+                        <p class="card-text">Number of all users</p>
+                    </div>
+                </div>
+
+
+                <div class="card mt-2 ml-2 mb-3 bg-secondary" style="max-width: 25rem;">
+                    <div class="card-body">
+                        <h5 class="h1">{{avail}}</h5>
+                        <h5 class="card-title">Available staff</h5>
+                        <p class="card-text">Number of available staff</p>
+                    </div>
+                </div>
+
+                <div class="card mt-2 ml-2 mb-3 bg-light" style="max-width: 25rem;">
+                    <div class="card-body text-danger">
+                        <h5 class="h1">{{leave}}0</h5>
+                        <h5 class="card-title">Leave staff</h5>
+                        <p class="card-text">Number of staff are leave</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header class="bg-info py-5">
+        <div class="container px-5">
+            <div class="row gx-5  ">
+                <div class="col ">
+                    <div class=" bg-secondary container p-2 ">
+                        <h1>Staff Details</h1>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">SI.No</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Check In</th>
+                                    <th scope="col">Check Out</th>
+                                    <th scope="col">Current Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each staffStatus}}
+                                <tr>
+                                    <th scope="row">{{inc @index}}</th>
+                                    <td>{{this.name}}</td>
+                                    <td>{{this.checkin_date}}</td>
+                                    <td>{{this.checkin_time}}</td>
+                                    <td>{{this.checkout_time}}</td>
+                                    <td>{{this.checkin}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col ml-">
+                    <div class="container bg-white p-2 ">
+                    <h1>Assigned Work View</h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">SI.No</th>
+                                <th scope="col">Issue</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Assigned Staff</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each workdata}}
+                            <tr>
+                                <th scope="row">{{inc @index}}</th>
+                                <td>{{this.complaint_topic}}</td>
+                                <td>{{this.phone}}</td>
+                                <td>{{this.status}}</td>
+                                <td>{{this.staff.name}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <header class="bg-info py-5">
+        <div class="container bg-light px-5">
+            <div class="row gx-5  ">
+                
+            </div>
+        </div>
+    </header>
+</section>

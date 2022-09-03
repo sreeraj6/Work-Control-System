@@ -1,0 +1,33 @@
+<section>
+    <div class="container p-2">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">SI.No</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Leave Type</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Status</th>
+                     <th scope="col">Cancel</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each leavestat}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.date}}</td>
+                    <td>{{this.type}}</td>
+                    <td>{{this.reason}}</td>
+                    <td><span class="badge {{this.badge}}">{{this.leave}}</span></td>
+                    <td><a type="button" onclick="cancel_Leave('{{this.staffId}}') " class="btn btn-warning">Cancel Leave</a></td> 
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+<script>
+    function cancel_Leave(staffId){
+        alert(staffId);
+    }
+</script>

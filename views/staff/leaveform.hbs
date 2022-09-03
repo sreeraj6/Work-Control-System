@@ -9,7 +9,7 @@
                             <div class="form-outline mb-2">
                                 <label class="form-label">Leave type</label>
                                 <select name="leavetype" class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
+                                    <option selected>Choose</option>
                                     <option value='Medical'>Medical</option>
                                     <option value='weekly'>weekly</option>
                                     <option value='other'>other</option>
@@ -24,6 +24,11 @@
                                 <label class="form-label" for="typePasswordX-2">Reason</label>
                                 <textarea class="form-control" rows="5" name="reason"></textarea>
                             </div>
+                            {{#if error}}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Something wrong</strong><br> Please contact admin
+                            </div>
+                            {{/if}}
                             <div class="form-outline mb-2">
                                 <p class="text-danger">*one day leave are applicable</p>
                             </div>

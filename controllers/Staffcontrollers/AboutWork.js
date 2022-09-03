@@ -13,7 +13,7 @@ module.exports = {
                         AssignedStaffId: ObjectId(staffId)
                     },
                     {
-                        status: { $lt: 6 }
+                        status: { $lt: 7 }
                     }
                 ]
             }).then((response) => {
@@ -25,7 +25,7 @@ module.exports = {
         console.log(data);
         return new Promise(async(resolve, reject) => {
             let check = await db.get().collection('complaints').findOne({_id: ObjectId(data.complaintId)})
-            if(check.status <5){
+            if(check.status <6){
                 db.get().collection('complaints').updateOne(
                     {
                         _id: ObjectId(data.complaintId)
@@ -60,23 +60,21 @@ module.exports = {
     },
     readyToWork:(data,staffId) =>{
         return new Promise(async(resolve,reject)=>{
-            let date = await db.get().collection('attendance').findOne({$and:[{staffId:ObjectId(staffId)},{checkinout:{$elemMatch:{date:data.date}}}]});
-                console.log(date);
+            console.log(staffId,data.date);
+            let date = await db.get().collection('attendance').findOne({$and:[{staffId:ObjectId(staffId)},{date:data.date}]});
+            console.log(date);
                 if(date){
                     db.get().collection('attendance').updateOne({
                         staffId:ObjectId(staffId),
-                        checkinout:{
-                            $elemMatch:{
-                                date:data.date
-                            }
-                        }
+                        date:data.date
+                         
                     },{
                         $set:{
-                            "checkinout.$.checkin":1,
-                            "checkinout.$.c_date":data.date,
-                            "checkinout.$.c_time":data.time,
-                            "checkinout.$.latitude":data.latitude,
-                            "checkinout.$.longitude":data.longitude
+                            checkin:1,
+                            cdate:data.date,
+                            ctime:data.time,
+                            latitude:data.latitude,
+                            longitude:data.longitude
                         }
                     }
                     )
@@ -93,14 +91,16 @@ module.exports = {
                         $and:
                         [
                             { AssignedStaffId : ObjectId(staffId) },
-                            { status: 5}
+                            { status: 6}
                         ]
                     },{
-                        $set:{status:6}
+                        $set:{status:7}
                     })
                     .then((response)=>{
                         resolve(response)
                     })
+                }else{
+                    resolve({res:true})
                 }
         })
     },

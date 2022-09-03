@@ -39,15 +39,21 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let staff = await db.get().collection('staff').find().toArray()
             for(var i=0;i<staff.length;i++){
-                switch(staff[i].checkin){
+                switch(staff[i].checkin,staff[i].leave){
                     case 0:
                         staff[i].checkin="Not available"
+                        staff[i].leave=""
                         break;
                     case 1:
                         staff[i].checkin="Available"
+                        staff[i].leave="Requested"
                         break;
                     case 2:
                         staff[i].checkin="On work"
+                        staff[i].leave="Granted"
+                        break;
+                    case 3:
+                        staff[i].leave="Rejected"
                         break;
                 }
             }
@@ -69,4 +75,27 @@ module.exports = {
             resolve(availStaff)
         })
     },
+    getLeaveRequest:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let leavereq = await db.get().collection('attendance').aggregate([
+                {
+                    $match:{
+                        leave:{$eq:1}
+                    }
+                },{
+                    $lookup:{
+                        from:'staff',
+                        localField:'staffId',
+                        foreignField:'_id',
+                        as:'staff'
+                    }
+                },{
+                    $project:{
+                        _id:0,date:1,type:1,reason:1,staff:{$arrayElemAt:['$staff',0]}
+                    }
+                 }
+            ]).toArray()
+            resolve(leavereq)
+        })
+    }
 }

@@ -1,0 +1,36 @@
+<section>
+    <div class="container p-2">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">SI.No</th>
+                    <th scope="col">Staff Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Leave Type</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">Status</th>
+                     <th scope="col">Cancel</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each leavereq}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.staff.name}}</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.type}}</td>
+                    <td>{{this.reason}}</td>
+                    <td><a type="button" onclick=" Grant_leave('{{this.staff._id}}'); " class="btn btn-warning">Grant</a></td>
+                    <td><a type="button" onclick="Reject_leave('{{this.staff._id}}') " class="btn btn-warning">Reject</a></td> 
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+<script>
+    function Grant_leave(staff_Id){
+        alert("Leave Granted"+staff_Id);
+        console.log("asdfasdf");
+    }
+</script>
