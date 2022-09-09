@@ -130,10 +130,13 @@ module.exports = {
                         case 2:
                             leave[i].leave = "Leave Granted"
                             leave[i].badge = "badge-success"
+                            leave[i].attribur= "disabled"
                             break;
                         case 3:
                             leave[i].leave = "Leave rejected"
                             leave[i].badge = "badge-danger"
+                            leave[i].attribur= "disabled"
+                            break;
                     }
                 }
                 resolve(leave)

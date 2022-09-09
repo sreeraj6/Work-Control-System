@@ -153,7 +153,7 @@ router.post('/leave',verifystaff,(req,res) => {
   req.body.time=time
   staffAttend.requestLeave(req.session.user._id,req.body).then((response)=>{
   if(response.status!=false){
-    res.redirect('/leavestatus')
+    res.redirect('/staff/leavestatus')
   }else{
     req.session.leave = true
     res.redirect('/staff/leave')

@@ -9,7 +9,6 @@
                     <th scope="col">Leave Type</th>
                     <th scope="col">Reason</th>
                     <th scope="col">Status</th>
-                     <th scope="col">Cancel</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,8 +19,13 @@
                     <td>{{this.date}}</td>
                     <td>{{this.type}}</td>
                     <td>{{this.reason}}</td>
-                    <td><a type="button" onclick=" Grant_leave('{{this.staff._id}}'); " class="btn btn-warning">Grant</a></td>
-                    <td><a type="button" onclick="Reject_leave('{{this.staff._id}}') " class="btn btn-warning">Reject</a></td> 
+                    <td>
+                        <select id="getleave" class="form-select" aria-label="Default select example">
+                            <option selected>Choose...</option>
+                            <option value='2/{{this.staff._id}}' >Grant</option>
+                            <option value='3/{{this.staff._id}}' >Reject</option>
+                        </select>
+                    </td> 
                 </tr>
                 {{/each}}
             </tbody>
@@ -29,8 +33,31 @@
     </div>
 </section>
 <script>
-    function Grant_leave(staff_Id){
-        alert("Leave Granted"+staff_Id);
-        console.log("asdfasdf");
-    }
+    $(function () {
+        $("#getleave").change(function(){
+            var staffId = $(this).val();
+            var array = staffId.split("/",2);
+            selectStaff(array)
+        })
+   })
+   function selectStaff(staffId){
+    var id = staffId
+        $.ajax({
+            url:'/admin/leavevalid',
+            data:{
+                value:id[0],
+                staffId:id[1]
+            },
+            method:"POST",
+            success:((response)=>{
+                if(response.grant){
+                    alert("Leave granted");
+                    location.reload();
+                }else{
+                    alert("Leave reject");
+                    location.reload()
+                }
+            })
+        })
+   }
 </script>

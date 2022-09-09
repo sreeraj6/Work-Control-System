@@ -23,6 +23,7 @@ router.get('/',verifyadmin, async(req, res) => {
     let pendingworks = await workDetails.newWorks();
     let availStaff = await admincontrol.getAvailableStaff();
     let usercount = await adminUser.getUserCount();
+    let leavecount = await admincontrol.getLeaveCount();
     for (var i = 0; i < workdata.length; i++) {
         switch (workdata[i].status) {
             case 1:
@@ -46,7 +47,7 @@ router.get('/',verifyadmin, async(req, res) => {
         }
     }
     let pending = pendingworks.length;
-    res.render('admin/dashboard',{staffStatus,workdata,admin:true,pending,usercount,progress:workdata.length,avail:availStaff.length,username})
+    res.render('admin/dashboard',{staffStatus,workdata,admin:true,pending,usercount,progress:workdata.length,avail:availStaff.length,leavecount,username})
 })
 //GET  /admin/staff
 //@DESC     staff checkin/out and leave details
@@ -164,12 +165,22 @@ router.get('/getloc', (req, res) => {
         res.json(response)
     })
 })
-
-router.get('/leave',(req,res)=>{
+//GET  /admin/leave
+//@DESC    get all leave request to review admin and grant/reject
+router.get('/leave',verifyadmin,(req,res)=>{
     admincontrol.getLeaveRequest().then((leavereq)=>{
-        res.render('admin/leave',{leavereq,admin:true})
+        res.render('admin/leave',{leavereq,admin:true,username})
     })
 })
-
+//POST  /admin/leavevalid
+//@DESC  grant leave for the staff and change the request status to grant
+router.post('/leavevalid',(req,res) => {
+    req.body.value = parseInt(req.body.value);
+    console.log(req.body);
+    admincontrol.validateLeave(req.body).then((response)=>{
+        console.log(response);
+        res.json(response);
+    })
+})
 
 module.exports = router

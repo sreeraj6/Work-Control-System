@@ -1,5 +1,7 @@
 const db = require('../config/connection')
 var bcrypt = require('bcrypt')
+const { ObjectId } = require('mongodb')
+const { response } = require('../app')
 
 module.exports = {
     //Add new staff into company
@@ -38,22 +40,22 @@ module.exports = {
     getStaff: () => {
         return new Promise(async (resolve, reject) => {
             let staff = await db.get().collection('staff').find().toArray()
-            for(var i=0;i<staff.length;i++){
-                switch(staff[i].checkin,staff[i].leave){
+            for (var i = 0; i < staff.length; i++) {
+                switch (staff[i].checkin, staff[i].leave) {
                     case 0:
-                        staff[i].checkin="Not available"
-                        staff[i].leave=""
+                        staff[i].checkin = "Not available"
+                        staff[i].leave = ""
                         break;
                     case 1:
-                        staff[i].checkin="Available"
-                        staff[i].leave="Requested"
+                        staff[i].checkin = "Available"
+                        staff[i].leave = "Requested"
                         break;
                     case 2:
-                        staff[i].checkin="On work"
-                        staff[i].leave="Granted"
+                        staff[i].checkin = "On work"
+                        staff[i].leave = "Granted"
                         break;
                     case 3:
-                        staff[i].leave="Rejected"
+                        staff[i].leave = "Rejected"
                         break;
                 }
             }
@@ -75,27 +77,55 @@ module.exports = {
             resolve(availStaff)
         })
     },
-    getLeaveRequest:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getLeaveRequest: () => {
+        return new Promise(async (resolve, reject) => {
             let leavereq = await db.get().collection('attendance').aggregate([
                 {
-                    $match:{
-                        leave:{$eq:1}
+                    $match: {
+                        leave: { $eq: 1 }
                     }
-                },{
-                    $lookup:{
-                        from:'staff',
-                        localField:'staffId',
-                        foreignField:'_id',
-                        as:'staff'
+                }, {
+                    $lookup: {
+                        from: 'staff',
+                        localField: 'staffId',
+                        foreignField: '_id',
+                        as: 'staff'
                     }
-                },{
-                    $project:{
-                        _id:0,date:1,type:1,reason:1,staff:{$arrayElemAt:['$staff',0]}
+                }, {
+                    $project: {
+                        _id: 0, date: 1, type: 1, reason: 1, staff: { $arrayElemAt: ['$staff', 0] }
                     }
-                 }
+                }
             ]).toArray()
             resolve(leavereq)
+        })
+    },
+    validateLeave: (data) => {
+        console.log(data);
+        return new Promise((resolve, reject) => {
+            db.get().collection('attendance').updateOne({
+                $and:[ { staffId:ObjectId(data.staffId) } , { leave: { $eq: 1 } } ]
+            },{
+                $set:{ leave: data.value }
+            })
+            db.get().collection('staff').updateOne({_id:ObjectId(data.staffId)},{
+                $set:{ leave: data.value }
+            }).then((response)=>{
+                if(data.value == 2){
+                    resolve({grant:true})
+                } else {
+                    resolve({grant:false})
+                }
+            })
+        })
+    },
+    getLeaveCount: ()=>{
+        return new Promise(async(resolve,reject) => {
+            var today = new Date().getDate()+"/0"+new Date().getMonth()+"/"+new Date().getFullYear();
+            console.log(today);
+            let leave = await db.get().collection('attendance').find({$and:[{leave:{$eq:2}},{date:today}]}).toArray()
+            console.log(leave);
+            resolve(leave.length)
         })
     }
 }
