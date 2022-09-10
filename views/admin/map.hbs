@@ -1,7 +1,10 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <h3>My Google Maps Demo</h3>
 <!--The div element for the map -->
+<h1>{{lat}},{{lng}}</h1>
 <button onclick="initMap()">load mpa</button>
+<input type="hidden" id="latt" value="{{lat}}">
+<input type="hidden" id="longg" value="{{lng}}">
 <div id="map" style="width:100%; height:100%"></div>
 <!-- 
      The `defer` attribute causes the callback to execute after the full HTML
@@ -10,21 +13,8 @@
      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
     -->
 <script>
-    var data = []
-    window.onload = loadData()
-    function loadData(){
-        alert('load');
-        $.ajax({
-            url:'/admin/getloc',
-            method:'GET',
-            success:((response)=>{
-                data=response;
-                console.log(data[0].coords);
-                
-            })
-        })
-    }
-    
+    var latitude = document.getElementById('latt');
+    var longitude = document.getElementById('longg');
     function initMap() {
         //map options
         var options = {
@@ -32,15 +22,7 @@
             center: { lat: 9.095831, lng: 76.528351 }
         }
         var map = new google.maps.Map(document.getElementById('map'), options);
-        /*
 
-        */
-        for(var i = 0; i<data.length;i++){
-            addMarker(data[i])
-
-        }
-        console.log(data[1].coords);
-        addMarker(data[1].coords);
         addMarker({ lat: 9.095831, lng: 76.528351 });
 
         // Add marker function

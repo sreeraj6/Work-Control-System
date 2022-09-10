@@ -13,6 +13,7 @@
       <th scope="col">Check Out</th>
       <th scope="col">Current Status</th>
       <th scope="col">Leave request</th>
+      <th scope="col">Leave request</th>
     </tr>
   </thead>
   <tbody>
@@ -24,10 +25,28 @@
       <td>{{this.checkin_time}}</td>
       <td>{{this.checkout_time}}</td>
       <td>{{this.checkin}}</td>
-      <td><a type="button" href="/admin/leave" class="btn btn-warning">{{this.leave}}</a></td>
+      <td>{{this.leave}}</td>
+      <td><a  class="btn btn-danger"></a>get</td>
+      <td><a class="btn btn-primary" href="/admin/map/{{this.latitude}},{{this.longitude}}">Last Location</a></td>
     </tr>
     {{/each}}
   </tbody>
 </table>
 </div>
 </section>
+<script>
+  function getLoc(latitude,longitude) {
+    alert(latitude+""+longitude);
+    $.ajax({
+      url:'/admin/getloc',
+      data:{
+        lat:latitude,
+        lng:longitude
+      },
+      method:'POST',
+      success:((response) => {
+        alert('sdfasd');
+      })
+    })
+  }
+</script>

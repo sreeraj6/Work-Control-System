@@ -155,15 +155,13 @@ router.post('/assign', (req, res) => {
     })
 })
 
-router.get('/map', (req, res) => {
-    workDetails.getLocOfStaff().then((location) => {
-        res.render('admin/map', { location })
-    })
+router.get('/map/:id', (req, res) => {
+    var loc = req.params.id;
+    var array = loc.split(",",2);
+     res.render('admin/map', { lat:array[0],lng:array[1]})
 })
-router.get('/getloc', (req, res) => {
-    workDetails.getLocOfStaff().then((response) => {
-        res.json(response)
-    })
+router.post('/getloc', (req, res) => {
+    console.log(req.body);
 })
 //GET  /admin/leave
 //@DESC    get all leave request to review admin and grant/reject
@@ -183,4 +181,7 @@ router.post('/leavevalid',(req,res) => {
     })
 })
 
+router.get('/adminmap/:id',(req,res) => {
+    console.log(req.params.id);
+})
 module.exports = router

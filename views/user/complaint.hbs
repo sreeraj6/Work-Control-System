@@ -4,7 +4,7 @@
         <!-- BILLING ADDRESS -->
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Complaint Form</h4>
-            <form class="needs-validation was-validated" method="post" id="checkout-form" >
+            <form class="needs-validation was-validated" onsubmit="return formvalidate()" method="post" id="checkout-form" >
                 <div class="mb-3">
                     <label for="complaint">Complaint</label>
                     <input type="text" class="form-control" name="complaint" placeholder="System did not turn on" maxlength="54" required="true">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="address">Phone</label>
-                    <input type="number" class="form-control" name="mobile" placeholder="+919876543210" required>
+                    <input type="number" class="form-control" name="mobile" id="phone" minlength="10" placeholder="9876543210" required>
                     <div class="invalid-feedback"> Please enter your phone number. </div>
                 </div>
                 <div class="mb-3">
@@ -53,9 +53,16 @@
                 </div>
                 
                 <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block"  type="submit">Raise the complaint</button>
+                <button class="btn btn-primary btn-lg btn-block" onclick="return confirm('Are you sure to raise the ticket')"  type="submit">Raise the complaint</button>
             </form>
         </div>
     </div>
 </div>
 <script>
+    function formvalidate(){
+        var mob = document.getElementById("phone").value;
+        if(mob.length!=10){
+            window.alert('Mobile should be digit');
+        }
+    }
+</script>
