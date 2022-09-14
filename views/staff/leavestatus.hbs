@@ -19,7 +19,7 @@
                     <td>{{this.type}}</td>
                     <td>{{this.reason}}</td>
                     <td><span class="badge {{this.badge}}">{{this.leave}}</span></td>
-                    <td><button type="button" onclick="cancel_Leave('{{this.staffId}}') " class="btn btn-warning" {{this.attribur}}>Cancel Leave</button></td> 
+                    <td><button type="button" onclick="cancel_Leave('{{this._id}}') " class="btn btn-warning" {{this.attribur}}>Cancel Leave</button></td> 
                 </tr>
                 {{/each}}
             </tbody>
@@ -27,7 +27,17 @@
     </div>
 </section>
 <script>
-    function cancel_Leave(staffId){
-        alert(staffId);
+    function cancel_Leave(leaveId){
+        $.ajax({
+            url:'cancelleave',
+            data:{
+                id:leaveId
+            },
+            method:'POST',
+            success:((response)=>{
+                alert('Your leave cancelled');
+                location.reload();
+            })
+        })
     }
 </script>

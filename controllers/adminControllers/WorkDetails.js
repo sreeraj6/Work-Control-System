@@ -48,7 +48,7 @@ module.exports = {
                 {
                     $match: {
                         status: {
-                            $gte: 1,
+                            $gt: 1,
                             $lte: 6
                         }
                     }
@@ -88,5 +88,12 @@ module.exports = {
                 resolve()
             }
         })
-    }
+    },
+    getAssignedWork: () => {
+        return new Promise(async (resolve, reject) => {
+            let pendingWorks = await db.get().collection('complaints').find({ status: { $gt: 1 , $lt: 7} }).toArray();
+            console.log(pendingWorks);
+            resolve(pendingWorks)
+        })
+    },
 }

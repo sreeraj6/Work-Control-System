@@ -82,10 +82,10 @@ router.get('/', verifystaff,async(req, res) => {
           currentwork.status = "Completed"
           break;
       }
-      res.render('staff/home',{staffhead: true,currentwork,checkin_stat})
+      res.render('staff/home',{staffhead: true,currentwork,checkin_stat,username: req.session.user.name,shome:'active'})
     }
     else {
-      res.render('staff/home',{staffhead: true,nowork: true,checkin_stat})
+      res.render('staff/home',{staffhead: true,nowork: true,checkin_stat,username: req.session.user.name,shome:'active'})
     }
   })
 });
@@ -104,6 +104,7 @@ router.post('/checkin',(req,res)=>{
 router.post('/checkout',(req,res)=>{
   staffAttend.doCheckOut(req.body,req.session.user._id).then((response)=>{
     console.log(response);
+    res.json(response)
   })
 })
 
@@ -130,7 +131,6 @@ router.post('/updateloc',(req,res) => {
 router.post('/ready',verifystaff,(req,res)=>{
   console.log(req.body,req.session.user._id);
   staffWork.readyToWork(req.body,req.session.user._id).then((response)=>{
-    console.log(response);
     res.json(response);
   })
 })
@@ -139,10 +139,10 @@ router.post('/ready',verifystaff,(req,res)=>{
 //@DESC  get leave form for request
 router.get('/leave',verifystaff,(req,res)=>{
   if(req.session.leave){
-    res.render('staff/leaveform',{staffhead: true,error:true})
+    res.render('staff/leaveform',{staffhead: true,error:true,username: req.session.user.name,leave:'active'})
     req.session.leave = false
   }else{
-    res.render('staff/leaveform',{staffhead:true})
+    res.render('staff/leaveform',{staffhead:true,username: req.session.user.name,leave:'active'})
   }
   
 })
@@ -165,8 +165,26 @@ router.post('/leave',verifystaff,(req,res) => {
 //@DESC get leave status granted or rejected
 router.get('/leavestatus',verifystaff,(req,res)=>{
   staffAttend.leaveStatus(req.session.user._id).then((leavestat)=>{
-    console.log(leavestat);
-    res.render('staff/leavestatus',{staffhead:true,leavestat})
+    res.render('staff/leavestatus',{staffhead:true,leavestat,username: req.session.user.name,leavestatus:'active'})
+  })
+})
+
+//POST  /staff/cancelleave
+//@DESC post cancel leave before grant
+router.post('/cancelleave',(req,res) => {
+  staffAttend.cancelLeave(req.body).then((response)=>{
+    res.json(response)
+  })
+})
+
+//GET   /staff/leave
+//@DESC get profile 
+router.get('/profile',verifystaff,async(req,res) => {
+  let count = await staffWork.getWorkcount(req.session.user._id);
+  let hours = await staffWork.getTotalWorkingHours(req.session.user._id)
+  staffAuth.getProfile(req.session.user._id).then((staff)=>{
+    console.log(hours);
+    res.render('staff/profile',{staff,staffhead:true,username: req.session.user.name,profile:'active',count,hours})
   })
 })
 module.exports = router;

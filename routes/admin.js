@@ -19,7 +19,7 @@ const verifyadmin = (req, res, next) => {
 //@DESC     admin dashboard
 router.get('/',verifyadmin, async(req, res) => {
     let staffStatus = await admincontrol.getStaff()
-    let workdata = await workDetails.getWorkDetails();
+    let workdata = await workDetails.getAssignedWork();
     let pendingworks = await workDetails.newWorks();
     let availStaff = await admincontrol.getAvailableStaff();
     let usercount = await adminUser.getUserCount();
@@ -155,14 +155,6 @@ router.post('/assign', (req, res) => {
     })
 })
 
-router.get('/map/:id', (req, res) => {
-    var loc = req.params.id;
-    var array = loc.split(",",2);
-     res.render('admin/map', { lat:array[0],lng:array[1]})
-})
-router.post('/getloc', (req, res) => {
-    console.log(req.body);
-})
 //GET  /admin/leave
 //@DESC    get all leave request to review admin and grant/reject
 router.get('/leave',verifyadmin,(req,res)=>{
@@ -181,7 +173,25 @@ router.post('/leavevalid',(req,res) => {
     })
 })
 
-router.get('/adminmap/:id',(req,res) => {
-    console.log(req.params.id);
+//GET  /admin/changestaffpass
+//@DESC change staff password
+router.get('/editstaff/:id',(req,res) => {
+    admincontrol.getCurrentStaff(req.params.id).then((staff)=>{
+        console.log(staff);
+        res.render('admin/staffdata',{staff});
+    })
+})
+
+router.post('/editstaff',(req,res)=>{
+    admincontrol.updateStaffData(req.body).then((response)=>{
+        res.redirect('/admin/staff')
+    })
+})
+
+
+router.get('/performance/:id',(req,res)=>{
+    admincontrol.getPerformance(req.params.id).then((present,work)=>{
+        res.render('admin/performance',{present,work,admin:true})
+    })
 })
 module.exports = router

@@ -5,22 +5,22 @@
                 <tr>
                     <th scope="col">SI.No</th>
                     <th scope="col">Issue</th>
-                    <th scope="col">Check In</th>
-                    <th scope="col">Check Out</th>
-                    <th scope="col">Work Assign</th>
+                    <th scope="col">Issue Brief</th>
+                    <th scope="col">Raised At</th>
+                    <th scope="col">Work Assign to</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each works}}
                 <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{inc @index}}</th>
                     <td>{{this.complaint_topic}}</td>
                     <td>{{this.complaint_brief}}</td>
                     <td>{{this.createdAt}}</td>
                     
                     <td>
                         <select id="selstaff" class="form-select" aria-label="Default select example">
-                            <option selected>Open this select menu</option>
+                            <option selected>Assign work to</option>
                             {{#each ../availStaff}}
                             <option value='{{this._id}}/{{../this._id}}' >{{this.name}}</option>
                             {{/each}}

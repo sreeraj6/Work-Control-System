@@ -69,7 +69,7 @@ module.exports = {
                     resolve({ checkout: true })
                 })
             } else {
-                resolve({ checkut: false })
+                resolve({ checkout: false })
             }
         })
     },
@@ -144,6 +144,13 @@ module.exports = {
                 resolve({notExist:true})
             }
 
+        })
+    },
+    cancelLeave:(leaveId) => {
+        return new Promise((resolve,reject) => {
+            db.get().collection('attendance').deleteOne({_id:ObjectId(leaveId)}).then((response)=>{
+                resolve(response)
+            })
         })
     }
 

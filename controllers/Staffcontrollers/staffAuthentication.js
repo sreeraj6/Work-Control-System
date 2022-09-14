@@ -1,4 +1,5 @@
 const db = require('../../config/connection');
+const { ObjectId } = require('mongodb')
 var bcrypt = require('bcrypt');
 
 
@@ -25,5 +26,25 @@ module.exports = {
                 resolve({ status: false })
             }
         })
-    }
+    },
+    getProfile:(staffId) =>{
+        return new Promise((resolve,reject) => {
+             db.get().collection('staff').findOne({_id:ObjectId(staffId)}).then((response)=>{
+                switch(response.checkin){
+                    case 0:
+                        response.checkin = "Not available"
+                        break;
+                    case 1:
+                        response.checkin = "Available"
+                        break;
+                    case 2:
+                        response.checkin = "On duty"
+                        break;
+                }
+                resolve(response)
+             })
+            
+        })
+    },
+    
 }

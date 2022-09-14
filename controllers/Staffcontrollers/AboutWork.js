@@ -60,7 +60,6 @@ module.exports = {
     },
     readyToWork:(data,staffId) =>{
         return new Promise(async(resolve,reject)=>{
-            console.log(staffId,data.date);
             let date = await db.get().collection('attendance').findOne({$and:[{staffId:ObjectId(staffId)},{date:data.date}]});
             console.log(date);
                 if(date){
@@ -104,4 +103,27 @@ module.exports = {
                 }
         })
     },
+    getWorkcount:(staffId) => {
+        return new Promise(async(resolve,reject) => {
+            let work = await db.get().collection('complaints').find({AssignedStaffId:ObjectId(staffId)}).toArray()
+            work = work.length;
+            resolve(work)
+        })
+    },
+    getTotalWorkingHours:(staffId) =>{
+        return new Promise(async(resolve,reject) => {
+            let present = await db.get().collection('attendance').find({$and:[{staffId:ObjectId(staffId)}]}).toArray()
+            var total = 0;
+            for (let i = 0; i < present.length; i++) {
+                if(present[i].checkin_time && present[i].checkout_time!='live'){
+                present[i].checkin_time = parseFloat(present[i].checkin_time);
+                present[i].checkout_time = parseFloat(present[i].checkout_time);
+                present[i].worktime = (present[i].checkout_time - present[i].checkin_time);
+                total = total + present[i].worktime;
+                }
+                
+            }
+            resolve(total)
+        })
+    }
 }

@@ -41,18 +41,28 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let staff = await db.get().collection('staff').find().toArray()
             for (var i = 0; i < staff.length; i++) {
-                switch (staff[i].checkin, staff[i].leave) {
+                switch (staff[i].checkin) {
                     case 0:
                         staff[i].checkin = "Not available"
-                        staff[i].leave = ""
                         break;
                     case 1:
                         staff[i].checkin = "Available"
-                        staff[i].leave = "Requested"
                         break;
                     case 2:
                         staff[i].checkin = "On work"
-                        staff[i].leave = "Granted"
+                        break;
+                }
+            }
+            for (var i = 0; i < staff.length; i++) {
+                switch (staff[i].leave) {
+                    case 0:
+                        staff[i].leave = " "
+                        break;
+                    case 1:
+                        staff[i].leave = "requested"
+                        break;
+                    case 2:
+                        staff[i].leave = "Leave"
                         break;
                     case 3:
                         staff[i].leave = "Rejected"
@@ -126,6 +136,55 @@ module.exports = {
             let leave = await db.get().collection('attendance').find({$and:[{leave:{$eq:2}},{date:today}]}).toArray()
             console.log(leave);
             resolve(leave.length)
+        })
+    },
+    getCurrentStaff:(staffId) =>{
+        return new Promise((resolve,reject) => {
+             db.get().collection('staff').findOne({_id:ObjectId(staffId)}).then((response)=>{
+                resolve(response)
+             })
+            
+        })
+    },
+    updateStaffData:(staffData) =>{
+        return new Promise(async(resolve,reject) => {
+            staffData.password = await bcrypt.hash(staffData.password, 10);
+            db.get().collection('staff').updateOne(
+                {_id:ObjectId(staffData.staffId)},
+                {
+                    $set:{
+                        name:staffData.name,
+                        email:staffData.email,
+                        phone:staffData.phone,
+                        password:staffData.password
+                    }
+                }
+                ).then((response)=>{
+                    resolve(response)
+                })
+        })
+    },
+    getPerformance:(staffId) => {
+        return new Promise(async(resolve,reject) => {
+            let present = await db.get().collection('attendance').find({$and:[{staffId:ObjectId(staffId)}]}).toArray()
+            let work = await db.get().collection('complaints').find({AssignedStaffId:ObjectId(staffId)}).toArray()
+            console.log(present);
+            var total = 0;
+            for (let i = 0; i < present.length; i++) {
+                if(present[i].checkin_time && present[i].checkout_time!='live'){
+                present[i].checkin_time = parseFloat(present[i].checkin_time);
+                present[i].checkout_time = parseFloat(present[i].checkout_time);
+                present[i].worktime = (present[i].checkout_time - present[i].checkin_time);
+                total = total + present[i].worktime;
+                } else if(present[i].checkout_time=='live'){
+                    present[i].worktime = present[i].checkout_time;
+                }
+                 else{
+                    present[i].worktime = 'Leave'
+                }
+                
+            }
+            resolve(present,work)
         })
     }
 }

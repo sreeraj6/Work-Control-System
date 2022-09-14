@@ -1,0 +1,25 @@
+<section>
+    <div class="container p-2">
+         <h2>TOTAL TIME SPENDED</h2>
+        <table class="table table-striped">
+            
+            <thead>
+                <tr>
+                    <th scope="col">SI.No</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Work Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each present}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.date}}</td>
+                    <td>{{this.worktime}}</td>
+                </tr>
+                {{/each}}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

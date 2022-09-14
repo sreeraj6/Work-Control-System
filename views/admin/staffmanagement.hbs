@@ -19,34 +19,19 @@
   <tbody>
     {{#each staff}}
     <tr>
-      <th scope="row">1</th>
+      <th scope="row">{{inc @index}}</th>
       <td>{{this.name}}</td>
       <td>{{this.checkin_date}}</td>
       <td>{{this.checkin_time}}</td>
       <td>{{this.checkout_time}}</td>
       <td>{{this.checkin}}</td>
       <td>{{this.leave}}</td>
-      <td><a  class="btn btn-danger"></a>get</td>
-      <td><a class="btn btn-primary" href="/admin/map/{{this.latitude}},{{this.longitude}}">Last Location</a></td>
+      <td><a class="btn btn-primary" target="_blank" href="https://google.com/maps/search/{{this.latitude}},{{this.longitude}}">Last Location</a></td>
+      <td><a class="btn btn-danger" target="_blank" href="/admin/editstaff/{{this._id}}">Edit Staff</a></td>
+      <td><a class="btn btn-success" href="/admin/performance/{{this._id}}">Fetch Performace</a></td>
     </tr>
     {{/each}}
   </tbody>
 </table>
 </div>
 </section>
-<script>
-  function getLoc(latitude,longitude) {
-    alert(latitude+""+longitude);
-    $.ajax({
-      url:'/admin/getloc',
-      data:{
-        lat:latitude,
-        lng:longitude
-      },
-      method:'POST',
-      success:((response) => {
-        alert('sdfasd');
-      })
-    })
-  }
-</script>

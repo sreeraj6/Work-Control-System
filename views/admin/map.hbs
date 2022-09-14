@@ -2,10 +2,11 @@
 <h3>My Google Maps Demo</h3>
 <!--The div element for the map -->
 <h1>{{lat}},{{lng}}</h1>
-<button onclick="initMap()">load mpa</button>
+<a target="_self" href="<a target="_self" href="https://google.com/maps/search/{{lat}},{{lng}}">Get loc</a>{{lat}},{{lng}}">Get loc</a>
 <input type="hidden" id="latt" value="{{lat}}">
 <input type="hidden" id="longg" value="{{lng}}">
 <div id="map" style="width:100%; height:100%"></div>
+
 <!-- 
      The `defer` attribute causes the callback to execute after the full HTML
      document has been parsed. For non-blocking uses, avoiding race conditions,
@@ -50,8 +51,8 @@
         }
     }
 
-    //window.initMap = initMap;
+    window.initMap = initMap;
 </script>
 <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdtdyVvbeW_tMjWgr4kuasRkNwgClAfco&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIvBGDu5os0AhHQUiKybks7-G6XiCqBaU&callback=initMap"
     defer></script>

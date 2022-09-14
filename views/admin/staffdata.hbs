@@ -1,0 +1,41 @@
+<section class="h-100 h-custom" style="background-color: #8fc4b7;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-8 col-xl-6">
+        <div class="card rounded-3">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Staff Info</h3>
+
+            <form method="post" action="/admin/editstaff" class="px-md-2">
+              <input type="hidden" name="staffId" value="{{staff._id}}">
+              <div class="form-outline mb-4">
+                <input type="text" name="name" id="form3Example1q" value="{{staff.name}}" class="form-control" />
+                <label class="form-label" for="form3Example1q">Name</label>
+              </div>
+
+              <div class="form-outline mb-4">
+                <input type="email" name="email" id="form3Example1q" value="{{staff.email}}" class="form-control" />
+                <label class="form-label" for="form3Example1q">Email</label>
+              </div>
+
+              <div class="form-outline mb-4">
+                <input type="number" name="phone" placeholder="Mobile" id="form3Example1q" value="{{staff.phone}}" class="form-control" />
+                <label class="form-label" for="form3Example1q">Phone No</label>
+              </div>
+
+              <div class="form-outline mb-4">
+                <input type="text" name="password" required placeholder="Password" id="form3Example1q"class="form-control" />
+                <label class="form-label" for="form3Example1q">Password</label>
+              </div>
+              <label><span class="text-danger">Password is required for edit staff</span></label>
+              <br>
+              <button type="submit" class="btn btn-success btn-lg mb-1">Edit Staff</button>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
