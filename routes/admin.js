@@ -189,9 +189,10 @@ router.post('/editstaff',(req,res)=>{
 })
 
 
-router.get('/performance/:id',(req,res)=>{
+router.get('/performance/:id',async(req,res)=>{
+    let attend = await admincontrol.getStaffData(req.params.id)
     admincontrol.getPerformance(req.params.id).then((present,work)=>{
-        res.render('admin/performance',{present,work,admin:true})
+        res.render('admin/performance',{present,work,attend,admin:true})
     })
 })
 module.exports = router

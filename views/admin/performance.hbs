@@ -1,5 +1,35 @@
 <section>
     <div class="container p-2">
+         <h2>Attendance Details</h2>
+        <table class="table table-striped">
+            
+            <thead>
+                <tr>
+                    <th scope="col">SI.No</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">checkin time</th>
+                    <th scope="col">CheckOut time</th>
+                    <th scope="col">Leave</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each attend}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.date}}</td>
+                    <td>{{this.checkin_time}}</td>
+                    <td>{{this.checkout_time}}</td>
+                    <td>{{leave}}</td>
+                </tr>
+                {{/each}}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section>
+    <div class="container p-2">
          <h2>TOTAL TIME SPENDED</h2>
         <table class="table table-striped">
             

@@ -186,5 +186,12 @@ module.exports = {
             }
             resolve(present,work)
         })
+    },
+    getStaffData:(staffId) => {
+        return new Promise((resolve,reject)=>{
+            db.get().collection('attendance').find({staffId:ObjectId(staffId)}).toArray().then((response)=>{
+                resolve(response)
+            })
+        })
     }
 }
